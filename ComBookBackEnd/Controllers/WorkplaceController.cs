@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using System.Data;
 using ComBookBackEnd.Models;
 
-namespace PartyGraphBackEnd.Controllers {
+namespace ComBookBackEnd.Controllers {
 
 	[ApiController]
 	[Route("api/[controller]")]
@@ -21,8 +21,8 @@ namespace PartyGraphBackEnd.Controllers {
 
 		[HttpPost]
 		public JsonResult Post(Workplace workplace) {
-
-				return new JsonResult($"TESTID: {workplace.id}");
+			bool x = true;
+				return new JsonResult(x);
 
 		}
 	}
