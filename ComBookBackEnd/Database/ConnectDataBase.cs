@@ -51,7 +51,7 @@ namespace ComBookBackEnd.Database {
 						int id = reader.GetInt32(4);
 						int floor = reader.GetInt32(5);
 
-						List<Workplace> workList = getWorkPlaceByRoomID(id);
+						List<Workplace> workList = getWorkPlaceByRoomID(id, r.workplaceList[0].date);
 
 						Room room = new Room(sizeX, sizeY, row, column, id, floor, workList);
 						roomList.Add(room);
@@ -65,16 +65,18 @@ namespace ComBookBackEnd.Database {
 			return roomList;
 		}
 
-		public static List<Workplace> getWorkPlaceByRoomID(int roomID) {
+		public static List<Workplace> getWorkPlaceByRoomID(int roomID, string date) {
 
 			MySqlConnection conn = new MySqlConnection(connStr);
 
 			conn.Open();
 
 			List<Workplace> workList = new List<Workplace>();
-			string sql = "SELECT sizeX, sizeY, row, `column`, id_workplace FROM workplace WHERE id_room = ?id";
+			string sql = "SELECT sizeX, sizeY, row, `column`, id_workplace, `bookingid` FROM workplace LEFT OUTER JOIN booking ON booking.workplaceid = workplace.id_workplace AND booking.date = '?date' WHERE id_room = ?id";
+
 			MySqlCommand cmd = new MySqlCommand(sql, conn);
 			cmd.Parameters.AddWithValue("?id", roomID);
+			cmd.Parameters.AddWithValue("?date", date);
 			var readerWorkplace = cmd.ExecuteReader();
 
 			if (readerWorkplace.HasRows) {
@@ -85,8 +87,17 @@ namespace ComBookBackEnd.Database {
 						int rowworkplace = readerWorkplace.GetInt32(2);
 						int columnworkplace = readerWorkplace.GetInt32(3);
 						int idworkplace = readerWorkplace.GetInt32(4);
+						string bookingid;
 
-						Workplace workplace = new Workplace(sizeXworkplace, sizeYworkplace, rowworkplace, columnworkplace, idworkplace);
+						if (!readerWorkplace.IsDBNull(5)) { // PRÜFEN WIESO NULL KOMMT
+							bookingid = "1";
+						} else {
+							bookingid = "0";
+						}
+
+
+
+						Workplace workplace = new Workplace(sizeXworkplace, sizeYworkplace, rowworkplace, columnworkplace, idworkplace, bookingid);
 						workList.Add(workplace);
 					}
 				}
