@@ -72,32 +72,24 @@ namespace ComBookBackEnd.Database {
 			conn.Open();
 
 			List<Workplace> workList = new List<Workplace>();
-			string sql = "SELECT sizeX, sizeY, row, `column`, id_workplace, `bookingid` FROM workplace LEFT OUTER JOIN booking ON booking.workplaceid = workplace.id_workplace AND booking.date = '?date' WHERE id_room = ?id";
+			string sql = "SELECT sizeX, sizeY, `row`, `column`, id_workplace, COALESCE(bookingid, 0) AS bookingid FROM workplace LEFT OUTER JOIN booking ON booking.workplaceid = workplace.id_workplace AND booking.date = ?date WHERE id_room = ?id";
 
 			MySqlCommand cmd = new MySqlCommand(sql, conn);
 			cmd.Parameters.AddWithValue("?id", roomID);
-			cmd.Parameters.AddWithValue("?date", date);
-			var readerWorkplace = cmd.ExecuteReader();
+			cmd.Parameters.AddWithValue("?date", DateTime.Parse(date));
+			MySqlDataReader readerWorkplace = cmd.ExecuteReader();
 
 			if (readerWorkplace.HasRows) {
 				while (readerWorkplace.Read()) {
-					if (!readerWorkplace.IsDBNull(0) && !readerWorkplace.IsDBNull(1) && !readerWorkplace.IsDBNull(2) && !readerWorkplace.IsDBNull(3) && !readerWorkplace.IsDBNull(4)) {
-						int sizeXworkplace = readerWorkplace.GetInt32(0);
-						int sizeYworkplace = readerWorkplace.GetInt32(1);
-						int rowworkplace = readerWorkplace.GetInt32(2);
-						int columnworkplace = readerWorkplace.GetInt32(3);
-						int idworkplace = readerWorkplace.GetInt32(4);
-						string bookingid;
+					if (!readerWorkplace.IsDBNull(0) && !readerWorkplace.IsDBNull(1) && !readerWorkplace.IsDBNull(2) && !readerWorkplace.IsDBNull(3) && !readerWorkplace.IsDBNull(4) && !readerWorkplace.IsDBNull(5)) {
+						int sizeXworkplace = (int)readerWorkplace["sizeX"];
+						int sizeYworkplace = (int)readerWorkplace["sizeY"];
+						int rowworkplace = (int)readerWorkplace["row"];
+						int columnworkplace = (int)readerWorkplace["column"];
+						int idworkplace = (int)readerWorkplace["id_workplace"];
+						long bookingid = (long)readerWorkplace["bookingid"];
 
-						if (!readerWorkplace.IsDBNull(5)) { // PRÜFEN WIESO NULL KOMMT
-							bookingid = "1";
-						} else {
-							bookingid = "0";
-						}
-
-
-
-						Workplace workplace = new Workplace(sizeXworkplace, sizeYworkplace, rowworkplace, columnworkplace, idworkplace, bookingid);
+						Workplace workplace = new Workplace(sizeXworkplace, sizeYworkplace, rowworkplace, columnworkplace, idworkplace, date, bookingid);
 						workList.Add(workplace);
 					}
 				}
