@@ -11,6 +11,7 @@ using ComBookBackEnd.Models;
 using static System.Net.Mime.MediaTypeNames;
 using Mysqlx.Resultset;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Nodes;
 
 namespace ComBookBackEnd.Database {
 
@@ -72,7 +73,7 @@ namespace ComBookBackEnd.Database {
 			conn.Open();
 
 			List<Workplace> workList = new List<Workplace>();
-			string sql = "SELECT sizeX, sizeY, `row`, `column`, id_workplace, COALESCE(bookingid, 0) AS bookingid FROM workplace LEFT OUTER JOIN booking ON booking.workplaceid = workplace.id_workplace AND booking.date = ?date WHERE id_room = ?id";
+			string sql = "SELECT sizeX, sizeY, `row`, `column`, id_workplace, COALESCE(bookingid, 0) AS bookingid, COALESCE(username, 0) AS username FROM workplace LEFT OUTER JOIN booking ON booking.workplaceid = workplace.id_workplace AND booking.date = ?date WHERE id_room = ?id";
 
 			MySqlCommand cmd = new MySqlCommand(sql, conn);
 			cmd.Parameters.AddWithValue("?id", roomID);
@@ -81,15 +82,16 @@ namespace ComBookBackEnd.Database {
 
 			if (readerWorkplace.HasRows) {
 				while (readerWorkplace.Read()) {
-					if (!readerWorkplace.IsDBNull(0) && !readerWorkplace.IsDBNull(1) && !readerWorkplace.IsDBNull(2) && !readerWorkplace.IsDBNull(3) && !readerWorkplace.IsDBNull(4) && !readerWorkplace.IsDBNull(5)) {
+					if (!readerWorkplace.IsDBNull(0) && !readerWorkplace.IsDBNull(1) && !readerWorkplace.IsDBNull(2) && !readerWorkplace.IsDBNull(3) && !readerWorkplace.IsDBNull(4) && !readerWorkplace.IsDBNull(5) && !readerWorkplace.IsDBNull(6)) {
 						int sizeXworkplace = (int)readerWorkplace["sizeX"];
 						int sizeYworkplace = (int)readerWorkplace["sizeY"];
 						int rowworkplace = (int)readerWorkplace["row"];
 						int columnworkplace = (int)readerWorkplace["column"];
 						int idworkplace = (int)readerWorkplace["id_workplace"];
 						long bookingid = (long)readerWorkplace["bookingid"];
+						string username = readerWorkplace["username"].ToString();
 
-						Workplace workplace = new Workplace(sizeXworkplace, sizeYworkplace, rowworkplace, columnworkplace, idworkplace, date, bookingid);
+						Workplace workplace = new Workplace(sizeXworkplace, sizeYworkplace, rowworkplace, columnworkplace, idworkplace, date, bookingid, username);
 						workList.Add(workplace);
 					}
 				}
@@ -97,6 +99,56 @@ namespace ComBookBackEnd.Database {
 			readerWorkplace.Close();
 			conn.Close();
 			return workList;
+		}
+
+		public static bool BookWorkPlace(Booking booking) {
+			ConnectDatabase();
+
+			conn.Open();
+			string sql = "INSERT INTO `booking`(`created`, `roomid`, `workplaceid`, `date`, `username`) VALUES (?dateTime, (SELECT id_room FROM workplace WHERE id_workplace = ?workplaceId), ?workplaceId, ?bookingDate, ?username)";
+			MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+			DateTime today = GetDateTime();
+
+			cmd.Parameters.AddWithValue("?dateTime", today);
+			cmd.Parameters.AddWithValue("?workplaceId", booking.workplaceid);
+			cmd.Parameters.AddWithValue("?bookingDate", booking.date);
+			cmd.Parameters.AddWithValue("?username", booking.username);
+
+			cmd.ExecuteNonQuery();
+			conn.Close();
+
+			return true;
+		}
+
+		public static object getBookingInformation(Booking booking) {
+			ConnectDatabase();
+
+			conn.Open();
+			string sql = "SELECT created, workplaceid, date, username FROM booking WHERE bookingid = ?bookingId";
+			MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+			cmd.Parameters.AddWithValue("?bookingId", booking.bookingid);
+
+
+			var reader = cmd.ExecuteReader();
+
+			reader.Read();
+
+			string created = reader.GetString(0);
+			int workplaceid = reader.GetInt32(1);
+			string date = reader.GetString(2);
+			string username = reader.GetString(3);
+
+			var payload = new { created = created, workplaceid = workplaceid, date = date, username = username };
+
+			conn.Close();
+			return payload;
+		}
+
+		public static DateTime GetDateTime() {
+			DateTime today = DateTime.Now;
+			return today;
 		}
 
 	}
