@@ -47,8 +47,8 @@ namespace ComBookBackEnd.Database {
 					if (!reader.IsDBNull(0) && !reader.IsDBNull(1) && !reader.IsDBNull(2) && !reader.IsDBNull(3) && !reader.IsDBNull(4) && !reader.IsDBNull(5)) {
 						int sizeX = reader.GetInt32(0);
 						int sizeY = reader.GetInt32(1);
-						int row = reader.GetInt32(2);
-						int column = reader.GetInt32(3);
+						string row = reader.GetString(2);
+						string column = reader.GetString(3);
 						int id = reader.GetInt32(4);
 						int floor = reader.GetInt32(5);
 
@@ -121,7 +121,23 @@ namespace ComBookBackEnd.Database {
 			return true;
 		}
 
-		public static object getBookingInformation(Booking booking) {
+		public static bool DeleteWorkPlace(Booking booking) {
+			ConnectDatabase();
+
+			conn.Open();
+			string sql = "DELETE FROM `booking` WHERE username = ?username AND bookingid = ?bookingid";
+			MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+			cmd.Parameters.AddWithValue("?bookingid", booking.bookingid);
+			cmd.Parameters.AddWithValue("?username", booking.username);
+
+			cmd.ExecuteNonQuery();
+			conn.Close();
+
+			return true;
+		}
+
+		public static object GetBookingInformation(Booking booking) {
 			ConnectDatabase();
 
 			conn.Open();
@@ -129,7 +145,6 @@ namespace ComBookBackEnd.Database {
 			MySqlCommand cmd = new MySqlCommand(sql, conn);
 
 			cmd.Parameters.AddWithValue("?bookingId", booking.bookingid);
-
 
 			var reader = cmd.ExecuteReader();
 

@@ -26,10 +26,17 @@ namespace ComBookBackEnd.Controllers {
 
 		}
 
-		[Route("api/[controller]/getBookingInformation")]
+		[Route("api/[controller]/deleteWorkplace")]
 		[HttpPost]
 		public JsonResult Post1(Booking booking) {
-			return new JsonResult(ConnectDataBase.getBookingInformation(booking));
+			return new JsonResult(ConnectDataBase.DeleteWorkPlace(booking));
+
+		}
+
+		[Route("api/[controller]/getBookingInformation")]
+		[HttpPost]
+		public JsonResult Post2(Booking booking) {
+			return new JsonResult(ConnectDataBase.GetBookingInformation(booking));
 
 		}
 	}
