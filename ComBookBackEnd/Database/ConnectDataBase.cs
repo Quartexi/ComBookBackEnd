@@ -25,7 +25,7 @@ namespace ComBookBackEnd.Database {
 			try {
 				conn.Open();
 			} catch (Exception ex) {
-				Environment.Exit(404);
+				Console.WriteLine("no connection to database");
 			}
 			conn.Close();
 		}
@@ -36,7 +36,7 @@ namespace ComBookBackEnd.Database {
 			List<Room> roomList = new List<Room>();
 
 			conn.Open();
-			string sql = "SELECT sizeX, sizeY, row, `column`, id, floor FROM room WHERE floor = ?floor";
+			string sql = "SELECT sizeX, sizeY, row, `column`, id, floor, name FROM room WHERE floor = ?floor";
 			MySqlCommand cmd = new MySqlCommand(sql, conn);
 			cmd.Parameters.AddWithValue("?floor", r.floor);
 
@@ -44,17 +44,18 @@ namespace ComBookBackEnd.Database {
 
 			if (reader.HasRows) {
 				while (reader.Read()) {
-					if (!reader.IsDBNull(0) && !reader.IsDBNull(1) && !reader.IsDBNull(2) && !reader.IsDBNull(3) && !reader.IsDBNull(4) && !reader.IsDBNull(5)) {
+					if (!reader.IsDBNull(0) && !reader.IsDBNull(1) && !reader.IsDBNull(2) && !reader.IsDBNull(3) && !reader.IsDBNull(4) && !reader.IsDBNull(5) && !reader.IsDBNull(6)) {
 						int sizeX = reader.GetInt32(0);
 						int sizeY = reader.GetInt32(1);
 						string row = reader.GetString(2);
 						string column = reader.GetString(3);
 						int id = reader.GetInt32(4);
 						int floor = reader.GetInt32(5);
+						string name = reader.GetString(6);
 
 						List<Workplace> workList = getWorkPlaceByRoomID(id, r.workplaceList[0].date);
 
-						Room room = new Room(sizeX, sizeY, row, column, id, floor, workList);
+						Room room = new Room(sizeX, sizeY, row, column, id, floor, name, workList);
 						roomList.Add(room);
 					}
 				}
@@ -112,7 +113,7 @@ namespace ComBookBackEnd.Database {
 
 			cmd.Parameters.AddWithValue("?dateTime", today);
 			cmd.Parameters.AddWithValue("?workplaceId", booking.workplaceid);
-			cmd.Parameters.AddWithValue("?bookingDate", booking.date);
+			cmd.Parameters.AddWithValue("?bookingDate", DateTime.Parse(booking.date));
 			cmd.Parameters.AddWithValue("?username", booking.username);
 
 			cmd.ExecuteNonQuery();
