@@ -26,7 +26,6 @@ CREATE TABLE booking (
   date date NOT NULL,
   bookingid int(11) NOT NULL AUTO_INCREMENT,
   username varchar(255) NOT NULL,
-  FOREIGN KEY (roomid) REFERENCES workplace(id_room),
   FOREIGN KEY (workplaceid) REFERENCES workplace(id_workplace),
   PRIMARY KEY (bookingid)
 )

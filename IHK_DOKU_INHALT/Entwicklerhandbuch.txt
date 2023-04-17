@@ -1,0 +1,27 @@
+Model:
+
+Room
+Konstruktor = int sizeX, int sizeY, string row, string column, int id, int floor, string name, List<Workplace> workplaces
+
+Workplace
+Konstruktor = int sizeX, int sizeY, int row, int column, int id, string date, long bookingid, string username
+
+Booking
+Konstruktor = DateTime created, int roomid, int workplaceid, string date, long bookingid, string username
+
+Controller:
+RoomController
+WorkplaceController
+BookingController
+
+Logik:
+ConnectDataBase
+Methoden:
+ConnectDatabase() = Verbindung mit der Datenbank aufbauen
+GetRooms(Room r) = Alle Räume einer bestimmten Etage aus der DB holen und zurückgeben
+GetWorkPlaceByRoomID(int roomID, string date) = Alle Arbeitsplätze der bestimmten Räume holen und zurückgeben
+BookWorkPlace(Booking booking) = Sitzplatz buchen
+DeleteWorkPlace(Booking booking) = Sitzplatzbuchung stornieren
+GetBookingInformation(Booking booking) = Informationen zu den jeweiligen Sitzplätzen holen und wiedergeben
+GetDateTime() = Aktuelles Datum wiedergeben
+CheckLDAPLogin(string username, string password) = Active Directory Zugang prüfen
