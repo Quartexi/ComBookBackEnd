@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ComBookBackEnd.Models.Booking">
+    <Position X="1.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAACAAAAAAAAAAQAEABAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Models\Booking.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Models.Room">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAACQAAEAAAAEACAAAAAAwA=</HashCode>
+      <FileName>Models\Room.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Models.Workplace">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAECQAAAAAAAEACAAQAAAgA=</HashCode>
+      <FileName>Models\Workplace.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Controllers.BookingController">
+    <Position X="1.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAACAAAAAAAAAEAAAAAAAI=</HashCode>
+      <FileName>Controllers\BookingController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Controllers.RoomController">
+    <Position X="3.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\RoomController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Controllers.WorkplaceController">
+    <Position X="5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\WorkplaceController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Database.ConnectDataBase">
+    <Position X="8" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAABAAAADAAAAAAAREAICAAAAAAAAAAAA=</HashCode>
+      <FileName>Database\ConnectDataBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Program">
+    <Position X="7.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComBookBackEnd.Startup">
+    <Position X="9" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAgAAACAAAAAA=</HashCode>
+      <FileName>StartUp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
