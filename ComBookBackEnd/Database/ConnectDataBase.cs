@@ -167,5 +167,9 @@ namespace ComBookBackEnd.Database {
 			return today;
 		}
 
+		public void CheckLDAPLogin(string username, string password) {
+
+		}
+
 	}
 }
